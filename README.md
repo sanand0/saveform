@@ -31,7 +31,7 @@ Use locally as an ES module:
 
 ```html
 <script type="module">
-  import saveform from "./node_modules/saveform/dist/network.js";
+  import saveform from "./node_modules/saveform/saveform.min.js";
   saveform("#my-form");
 </script>
 ```
@@ -40,7 +40,7 @@ Use via CDN as an ES Module:
 
 ```html
 <script type="module">
-  import saveform from "https://cdn.jsdelivr.net/npm/saveform@2";
+  import saveform from "https://cdn.jsdelivr.net/npm/saveform@1";
   saveform("#my-form");
 </script>
 ```
