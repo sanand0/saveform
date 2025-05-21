@@ -88,7 +88,7 @@ tap.test("saveform - initialization with invalid selector", (t) => {
   t.throws(
     () => saveform("#non-existent-form"),
     { message: "saveform: Invalid form element" },
-    "should throw with invalid form selector",
+    "should throw with invalid form selector"
   );
 
   t.end();
@@ -117,11 +117,7 @@ tap.test("saveform - save and restore basic fields", (t) => {
   t.equal(savedData.email, "test@example.com", "should save email input value");
   t.equal(savedData.comments, "Some text", "should save textarea value");
   t.equal(savedData.country, "ca", "should save select value");
-  t.same(
-    savedData.languages,
-    ["js", "rb"],
-    "should save multiple select values",
-  );
+  t.same(savedData.languages, ["js", "rb"], "should save multiple select values");
   t.equal(savedData.subscribe, true, "should save checkbox state");
   t.equal(savedData.gender, "male", "should save radio button value");
 
@@ -144,35 +140,15 @@ tap.test("saveform - save and restore basic fields", (t) => {
   t.ok(restoredFields, "should return list of restored fields");
 
   // Verify values were restored
-  t.equal(
-    document.querySelector('[name="username"]').value,
-    "initial",
-    "should restore text input",
-  );
-  t.equal(
-    document.querySelector('[name="email"]').value,
-    "test@example.com",
-    "should restore email input",
-  );
-  t.equal(
-    document.querySelector('[name="country"]').value,
-    "ca",
-    "should restore select value",
-  );
-  t.equal(
-    document.querySelector('[name="subscribe"]').checked,
-    true,
-    "should restore checkbox state",
-  );
-  t.equal(
-    document.querySelector('[name="gender"][value="male"]').checked,
-    true,
-    "should restore radio button state",
-  );
+  t.equal(document.querySelector('[name="username"]').value, "initial", "should restore text input");
+  t.equal(document.querySelector('[name="email"]').value, "test@example.com", "should restore email input");
+  t.equal(document.querySelector('[name="country"]').value, "ca", "should restore select value");
+  t.equal(document.querySelector('[name="subscribe"]').checked, true, "should restore checkbox state");
+  t.equal(document.querySelector('[name="gender"][value="male"]').checked, true, "should restore radio button state");
   t.equal(
     document.querySelector('[name="gender"][value="female"]').checked,
     false,
-    "should uncheck other radio buttons",
+    "should uncheck other radio buttons"
   );
 
   t.end();
@@ -188,10 +164,7 @@ tap.test("saveform - password fields exclusion", (t) => {
   const storedJson = global.localStorage.getItem("saveform_test-form");
   const storedData = JSON.parse(storedJson);
 
-  t.notOk(
-    storedData.hasOwnProperty("password"),
-    "should not save password fields by default",
-  );
+  t.notOk(storedData.hasOwnProperty("password"), "should not save password fields by default");
 
   t.end();
 });
@@ -210,8 +183,7 @@ tap.test("saveform - sessionStorage option", (t) => {
   const localStorageData = global.localStorage.getItem("saveform_test-form");
   t.notOk(localStorageData, "should not save to localStorage");
 
-  const sessionStorageData =
-    global.sessionStorage.getItem("saveform_test-form");
+  const sessionStorageData = global.sessionStorage.getItem("saveform_test-form");
   t.ok(sessionStorageData, "should save to sessionStorage");
 
   t.end();
@@ -270,18 +242,9 @@ tap.test("saveform - fields inclusion option with function", (t) => {
   const storedJson = global.localStorage.getItem("saveform_test-form");
   const storedData = JSON.parse(storedJson);
 
-  t.ok(
-    storedData.hasOwnProperty("username"),
-    "should save fields that match function",
-  );
-  t.ok(
-    storedData.hasOwnProperty("email"),
-    "should save fields that match function",
-  );
-  t.notOk(
-    storedData.hasOwnProperty("comments"),
-    "should not save fields that don't match function",
-  );
+  t.ok(storedData.hasOwnProperty("username"), "should save fields that match function");
+  t.ok(storedData.hasOwnProperty("email"), "should save fields that match function");
+  t.notOk(storedData.hasOwnProperty("comments"), "should not save fields that don't match function");
 
   t.end();
 });
@@ -299,19 +262,10 @@ tap.test("saveform - exclude option with string selector", (t) => {
   const storedJson = global.localStorage.getItem("saveform_test-form");
   const storedData = JSON.parse(storedJson);
 
-  t.ok(
-    storedData.hasOwnProperty("username"),
-    "should save non-excluded fields",
-  );
+  t.ok(storedData.hasOwnProperty("username"), "should save non-excluded fields");
   t.ok(storedData.hasOwnProperty("email"), "should save non-excluded fields");
-  t.notOk(
-    storedData.hasOwnProperty("comments"),
-    "should not save excluded textarea",
-  );
-  t.notOk(
-    storedData.hasOwnProperty("country"),
-    "should not save excluded select",
-  );
+  t.notOk(storedData.hasOwnProperty("comments"), "should not save excluded textarea");
+  t.notOk(storedData.hasOwnProperty("country"), "should not save excluded select");
 
   t.end();
 });
@@ -329,18 +283,9 @@ tap.test("saveform - exclude option with function", (t) => {
   const storedJson = global.localStorage.getItem("saveform_test-form");
   const storedData = JSON.parse(storedJson);
 
-  t.ok(
-    storedData.hasOwnProperty("username"),
-    "should save non-excluded fields",
-  );
-  t.notOk(
-    storedData.hasOwnProperty("comments"),
-    "should not save fields that match exclude function",
-  );
-  t.notOk(
-    storedData.hasOwnProperty("country"),
-    "should not save fields that match exclude function",
-  );
+  t.ok(storedData.hasOwnProperty("username"), "should save non-excluded fields");
+  t.notOk(storedData.hasOwnProperty("comments"), "should not save fields that match exclude function");
+  t.notOk(storedData.hasOwnProperty("country"), "should not save fields that match exclude function");
 
   t.end();
 });
@@ -355,10 +300,8 @@ tap.test("saveform - custom accessors and setters", (t) => {
       '[name="email"]': (field) => ({ address: field.value, verified: false }),
     },
     setters: {
-      '[name="username"]': (field, value) =>
-        (field.value = value.toLowerCase()),
-      '[name="email"]': (field, value) =>
-        (field.value = value.address || value),
+      '[name="username"]': (field, value) => (field.value = value.toLowerCase()),
+      '[name="email"]': (field, value) => (field.value = value.address || value),
     },
   });
 
@@ -367,16 +310,8 @@ tap.test("saveform - custom accessors and setters", (t) => {
   const storedJson = global.localStorage.getItem("saveform_test-form");
   const storedData = JSON.parse(storedJson);
 
-  t.equal(
-    storedData.username,
-    "INITIAL",
-    "should use custom accessor for username",
-  );
-  t.same(
-    storedData.email,
-    { address: "test@example.com", verified: false },
-    "should use custom accessor for email",
-  );
+  t.equal(storedData.username, "INITIAL", "should use custom accessor for username");
+  t.same(storedData.email, { address: "test@example.com", verified: false }, "should use custom accessor for email");
 
   // Change form values and save again to test restore with custom setters
   document.querySelector('[name="username"]').value = "changed";
@@ -384,16 +319,8 @@ tap.test("saveform - custom accessors and setters", (t) => {
 
   form.restore();
 
-  t.equal(
-    document.querySelector('[name="username"]').value,
-    "initial",
-    "should use custom setter for username",
-  );
-  t.equal(
-    document.querySelector('[name="email"]').value,
-    "test@example.com",
-    "should use custom setter for email",
-  );
+  t.equal(document.querySelector('[name="username"]').value, "initial", "should use custom setter for username");
+  t.equal(document.querySelector('[name="email"]').value, "test@example.com", "should use custom setter for email");
 
   t.end();
 });
@@ -416,10 +343,7 @@ tap.test("saveform - events option", (t) => {
   let storedJson = global.localStorage.getItem("saveform_test-form");
   let storedData = JSON.parse(storedJson);
 
-  t.notOk(
-    storedData?.username,
-    "should not save on input event when only change is specified",
-  );
+  t.notOk(storedData?.username, "should not save on input event when only change is specified");
 
   // Now dispatch change event
   usernameField.dispatchEvent(new window.Event("change", { bubbles: true }));
@@ -499,11 +423,7 @@ tap.test("saveform - form without id or name", (t) => {
   const keys = Object.keys(global.localStorage.items);
   const saveformKeys = keys.filter((key) => key.startsWith("saveform_form_"));
 
-  t.equal(
-    saveformKeys.length,
-    1,
-    "should generate a key for a form without id",
-  );
+  t.equal(saveformKeys.length, 1, "should generate a key for a form without id");
 
   t.end();
 });
@@ -561,16 +481,8 @@ tap.test("saveform - multiple forms on page", (t) => {
   // Restore only form1
   form1.restore();
 
-  t.equal(
-    document.querySelector('#form1 [name="username"]').value,
-    "user1",
-    "should restore first form",
-  );
-  t.equal(
-    document.querySelector('#form2 [name="username"]').value,
-    "changed2",
-    "should not affect second form",
-  );
+  t.equal(document.querySelector('#form1 [name="username"]').value, "user1", "should restore first form");
+  t.equal(document.querySelector('#form2 [name="username"]').value, "changed2", "should not affect second form");
 
   t.end();
 });
@@ -629,41 +541,13 @@ tap.test("saveform - complex forms with varied elements", (t) => {
   form.restore();
 
   // Verify all values were restored
-  t.equal(
-    document.querySelector('[name="name"]').value,
-    "John Doe",
-    "should restore text input",
-  );
-  t.equal(
-    document.querySelector('[name="age"]').value,
-    "30",
-    "should restore number input",
-  );
-  t.equal(
-    document.querySelector('[name="birthdate"]').value,
-    "1990-01-01",
-    "should restore date input",
-  );
-  t.equal(
-    document.querySelector('[name="notifications"]').checked,
-    true,
-    "should restore checkbox",
-  );
-  t.equal(
-    document.querySelector('[name="theme"][value="light"]').checked,
-    true,
-    "should restore radio button",
-  );
-  t.equal(
-    document.querySelector('[name="theme"][value="dark"]').checked,
-    false,
-    "should uncheck other radio buttons",
-  );
-  t.equal(
-    document.querySelector('[name="experience"]').value,
-    "5",
-    "should restore range input",
-  );
+  t.equal(document.querySelector('[name="name"]').value, "John Doe", "should restore text input");
+  t.equal(document.querySelector('[name="age"]').value, "30", "should restore number input");
+  t.equal(document.querySelector('[name="birthdate"]').value, "1990-01-01", "should restore date input");
+  t.equal(document.querySelector('[name="notifications"]').checked, true, "should restore checkbox");
+  t.equal(document.querySelector('[name="theme"][value="light"]').checked, true, "should restore radio button");
+  t.equal(document.querySelector('[name="theme"][value="dark"]').checked, false, "should uncheck other radio buttons");
+  t.equal(document.querySelector('[name="experience"]').value, "5", "should restore range input");
 
   t.end();
 });
@@ -702,11 +586,93 @@ tap.test("saveform - fields without names", (t) => {
   const storedJson = global.localStorage.getItem("saveform_test-form");
   const storedData = JSON.parse(storedJson);
 
-  t.notOk(
-    storedData.hasOwnProperty("no-name"),
-    "should not save fields without name",
-  );
+  t.notOk(storedData.hasOwnProperty("no-name"), "should not save fields without name");
   t.ok(storedData.hasOwnProperty("with-name"), "should save fields with name");
 
+  t.end();
+});
+
+tap.test("saveform - fields selector with no matches", (t) => {
+  setupDOM(basicFormHTML);
+  global.localStorage.clear();
+
+  const form = saveform("#test-form", {
+    fields: "input.nonexistent", // selector matches nothing
+  });
+
+  const saved = form.save();
+  t.same(saved, {}, "should return empty object when no fields match");
+
+  const storedJson = global.localStorage.getItem("saveform_test-form");
+  t.equal(storedJson, "{}", "should store empty JSON object");
+
+  const restored = form.restore();
+  t.same(restored, [], "should restore nothing and return empty array");
+
+  t.end();
+});
+
+tap.test("saveform - fields universal selector '*'", (t) => {
+  setupDOM(basicFormHTML);
+  global.localStorage.clear();
+
+  const form = saveform("#test-form", { fields: "*" });
+  form.save();
+
+  const storedJson = global.localStorage.getItem("saveform_test-form");
+  const storedData = JSON.parse(storedJson);
+
+  t.ok(storedData.username, "should save text input");
+  t.ok(storedData.email, "should save email input");
+  t.ok(storedData.comments, "should save textarea");
+  t.ok(storedData.country, "should save select element");
+  t.notOk(storedData.hasOwnProperty("password"), "should still respect default password exclusion");
+
+  t.end();
+});
+
+tap.test("saveform - default setter handles nullish values", (t) => {
+  setupDOM(basicFormHTML);
+  global.localStorage.clear();
+
+  const form = saveform("#test-form");
+  form.save(); // initial save
+
+  // Corrupt saved data: set textarea value to null
+  const data = JSON.parse(global.localStorage.getItem("saveform_test-form"));
+  data.comments = null;
+  global.localStorage.setItem("saveform_test-form", JSON.stringify(data));
+
+  // Change current value so we can see if restore overwrites it
+  document.querySelector('[name="comments"]').value = "changed";
+
+  form.restore();
+
+  t.equal(
+    document.querySelector('[name="comments"]').value,
+    "",
+    "default setter should write empty string when stored value is nullish"
+  );
+  t.end();
+});
+
+tap.test("saveform - generateFormId uniqueness for unnamed forms", (t) => {
+  setupDOM(`
+    <form><input name="first" value="1"></form>
+    <form><input name="second" value="2"></form>
+  `);
+  global.localStorage.clear();
+
+  const [f1, f2] = document.querySelectorAll("form");
+  const s1 = saveform(f1);
+  const s2 = saveform(f2);
+
+  s1.save();
+  s2.save();
+
+  const keys = Object.keys(global.localStorage.items).filter((k) => k.startsWith("saveform_form_"));
+
+  t.equal(keys.length, 2, "should create two separate storage keys");
+  t.ok(keys[0] !== keys[1], "each unnamed form should get a unique id");
   t.end();
 });

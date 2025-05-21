@@ -18,12 +18,31 @@ Automatically save HTML form field values to localStorage or sessionStorage and 
 - Custom storage triggers (input, change, or both)
 - Support for custom value accessors and setters
 - Configurable storage key prefix
-- Rich event system
 
 ## Install
 
+Install via `npm`:
+
 ```bash
-npm install saveform
+npm install saveform@1
+```
+
+Use locally as an ES module:
+
+```html
+<script type="module">
+  import saveform from "./node_modules/saveform/dist/network.js";
+  saveform("#my-form");
+</script>
+```
+
+Use via CDN as an ES Module:
+
+```html
+<script type="module">
+  import saveform from "https://cdn.jsdelivr.net/npm/saveform@2";
+  saveform("#my-form");
+</script>
 ```
 
 ## Usage
@@ -57,15 +76,15 @@ The form element or selector string.
 
 Type: `Object`
 
-| Option      | Type                   | Default                              | Description                |
-| ----------- | ---------------------- | ------------------------------------ | -------------------------- |
-| `storage`   | `Storage`              | `localStorage`                       | Storage mechanism to use   |
-| `prefix`    | `string`               | `'saveform_'`                        | Prefix for storage keys    |
-| `events`    | `string[]`             | `['input', 'change']`                | Events that trigger saving |
-| `fields`    | `string` \| `Function` | `'all'`                              | Fields to include          |
-| `exclude`   | `string` \| `Function` | `'[type="password"], [type="file"]'` | Fields to exclude          |
-| `accessors` | `Object`               | `{}`                                 | Custom value getters       |
-| `setters`   | `Object`               | `{}`                                 | Custom value setters       |
+| Option      | Type                   | Default                              | Description                          |
+| ----------- | ---------------------- | ------------------------------------ | ------------------------------------ |
+| `storage`   | `Storage`              | `localStorage`                       | Storage mechanism to use             |
+| `prefix`    | `string`               | `'saveform_'`                        | Prefix for storage keys              |
+| `events`    | `string[]`             | `['input', 'change']`                | Events that trigger saving           |
+| `fields`    | `string` \| `Function` | `'*'`                                | Fields to include (`*` includes all) |
+| `exclude`   | `string` \| `Function` | `'[type="password"], [type="file"]'` | Fields to exclude                    |
+| `accessors` | `Object`               | `{}`                                 | Custom value getters                 |
+| `setters`   | `Object`               | `{}`                                 | Custom value setters                 |
 
 ### Methods
 
@@ -139,14 +158,12 @@ saveform("#my-form", {
     ".tag-input": (field) => field.value.split(",").map((t) => t.trim()),
 
     // Get selected options from multi-select
-    "select[multiple]": (field) =>
-      Array.from(field.selectedOptions).map((opt) => opt.value),
+    "select[multiple]": (field) => Array.from(field.selectedOptions).map((opt) => opt.value),
   },
 
   setters: {
     // Custom setter for tag inputs
-    ".tag-input": (field, value) =>
-      (field.value = Array.isArray(value) ? value.join(", ") : value),
+    ".tag-input": (field, value) => (field.value = Array.isArray(value) ? value.join(", ") : value),
   },
 });
 ```

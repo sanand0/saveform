@@ -11,7 +11,7 @@ export default function saveform(element, options = {}) {
     storage: localStorage,
     prefix: "saveform_",
     events: ["input", "change"],
-    fields: "all",
+    fields: "*",
     exclude: '[type="password"], [type="file"]',
     accessors: {},
     setters: {},
@@ -94,7 +94,7 @@ export default function saveform(element, options = {}) {
       if (!field.name) return false;
 
       // Handle inclusion criteria
-      if (config.fields !== "all") {
+      if (config.fields !== "*") {
         if (typeof config.fields === "string" && !field.matches(config.fields))
           return false;
         if (typeof config.fields === "function" && !config.fields(field))
