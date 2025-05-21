@@ -1,0 +1,50 @@
+{
+  "name": "saveform",
+  "version": "1.0.0",
+  "description": "Lightweight solution to persist form field values across page reloads",
+  "type": "module",
+  "main": "saveform.min.js",
+  "module": "saveform.js",
+  "exports": {
+    "import": "./saveform.js",
+    "default": "./saveform.min.js"
+  },
+  "files": [
+    "saveform.js",
+    "saveform.min.js",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "lint": "prettier --write *.js *.md *.json",
+    "build": "esbuild saveform.js --bundle --format=esm --outfile=saveform.min.js --minify",
+    "test": "tap test.js",
+    "prepublishOnly": "npm run build && npm run test"
+  },
+  "keywords": [
+    "form",
+    "localStorage",
+    "sessionStorage",
+    "persistence",
+    "save",
+    "restore",
+    "input",
+    "browser"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sanand0/saveform.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sanand0/saveform/issues"
+  },
+  "homepage": "https://github.com/sanand0/saveform#readme",
+  "devDependencies": {
+    "esbuild": "^0.25.4",
+    "jsdom": "^26.1.0",
+    "prettier": "^3.5.3",
+    "tap": "^21.1.0"
+  }
+}
