@@ -21,8 +21,7 @@ export default function saveform(element, options = {}) {
   const config = { ...defaults, ...options };
 
   // Normalize element (convert string selector to element)
-  const form =
-    typeof element === "string" ? document.querySelector(element) : element;
+  const form = typeof element === "string" ? document.querySelector(element) : element;
 
   if (!form || !(form instanceof HTMLElement)) {
     throw new Error("saveform: Invalid form element");
@@ -38,8 +37,7 @@ export default function saveform(element, options = {}) {
   const defaultAccessors = {
     'input[type="checkbox"]': (field) => field.checked,
     'input[type="radio"]': (field) => (field.checked ? field.value : undefined),
-    "select[multiple]": (field) =>
-      Array.from(field.selectedOptions).map((opt) => opt.value),
+    "select[multiple]": (field) => Array.from(field.selectedOptions).map((opt) => opt.value),
     default: (field) => field.value,
   };
 
@@ -90,23 +88,19 @@ export default function saveform(element, options = {}) {
     const allFields = Array.from(form.elements);
 
     return allFields.filter((field) => {
-      // Skip fields without name
-      if (!field.name) return false;
+      // Skip fields without name or ID
+      if (!field.name && !field.id) return false;
 
       // Handle inclusion criteria
       if (config.fields !== "*") {
-        if (typeof config.fields === "string" && !field.matches(config.fields))
-          return false;
-        if (typeof config.fields === "function" && !config.fields(field))
-          return false;
+        if (typeof config.fields === "string" && !field.matches(config.fields)) return false;
+        if (typeof config.fields === "function" && !config.fields(field)) return false;
       }
 
       // Handle exclusion criteria
       if (config.exclude) {
-        if (typeof config.exclude === "string" && field.matches(config.exclude))
-          return false;
-        if (typeof config.exclude === "function" && config.exclude(field))
-          return false;
+        if (typeof config.exclude === "string" && field.matches(config.exclude)) return false;
+        if (typeof config.exclude === "function" && config.exclude(field)) return false;
       }
 
       return true;
@@ -132,7 +126,7 @@ export default function saveform(element, options = {}) {
       // Skip undefined values (unselected radio buttons)
       if (value === undefined) return;
 
-      data[field.name] = value;
+      data[field.name || field.id] = value;
     });
 
     // Save to storage
@@ -159,10 +153,10 @@ export default function saveform(element, options = {}) {
     const restoredFields = [];
 
     fields.forEach((field) => {
-      if (data[field.name] !== undefined) {
+      if (data[field.name || field.id] !== undefined) {
         const setter = getSetter(field);
-        setter(field, data[field.name]);
-        restoredFields.push(field.name);
+        setter(field, data[field.name || field.id]);
+        restoredFields.push(field.name || field.id);
       }
     });
 

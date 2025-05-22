@@ -24,7 +24,7 @@ Automatically save HTML form field values to localStorage or sessionStorage and 
 Install via `npm`:
 
 ```bash
-npm install saveform@1
+npm install saveform@1.2
 ```
 
 Use locally as an ES module:
@@ -40,7 +40,7 @@ Use via CDN as an ES Module:
 
 ```html
 <script type="module">
-  import saveform from "https://cdn.jsdelivr.net/npm/saveform@1";
+  import saveform from "https://cdn.jsdelivr.net/npm/saveform@1.2";
   saveform("#my-form");
 </script>
 ```
@@ -59,6 +59,8 @@ saveform("#my-form", {
   events: ["change"], // only save on change events
 });
 ```
+
+This saves all fields that have a `name="..."` or an `id="..."`.
 
 ## API
 

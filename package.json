@@ -1,6 +1,6 @@
 {
   "name": "saveform",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Lightweight solution to persist form field values across page reloads",
   "type": "module",
   "main": "saveform.min.js",
@@ -16,7 +16,7 @@
     "README.md"
   ],
   "scripts": {
-    "lint": "prettier --write *.js *.md *.json",
+    "lint": "prettier --write --print-width 120 *.js *.md *.json",
     "build": "esbuild saveform.js --bundle --format=esm --outfile=saveform.min.js --minify",
     "test": "tap --allow-incomplete-coverage test.js",
     "prepublishOnly": "npm run build && npm run test && echo DONE"

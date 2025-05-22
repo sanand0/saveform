@@ -88,7 +88,7 @@ tap.test("saveform - initialization with invalid selector", (t) => {
   t.throws(
     () => saveform("#non-existent-form"),
     { message: "saveform: Invalid form element" },
-    "should throw with invalid form selector"
+    "should throw with invalid form selector",
   );
 
   t.end();
@@ -148,7 +148,7 @@ tap.test("saveform - save and restore basic fields", (t) => {
   t.equal(
     document.querySelector('[name="gender"][value="female"]').checked,
     false,
-    "should uncheck other radio buttons"
+    "should uncheck other radio buttons",
   );
 
   t.end();
@@ -592,6 +592,52 @@ tap.test("saveform - fields without names", (t) => {
   t.end();
 });
 
+tap.test("saveform - fields with empty name or no name but with ID", (t) => {
+  // Setup DOM with fields having empty name or no name but with ID
+  setupDOM(`
+    <form id="test-form">
+      <input type="text" id="empty-name-field" name="" value="empty-name-value">
+      <input type="text" id="no-name-field" value="no-name-value">
+      <input type="text" value="no-name-no-id-value">
+    </form>
+  `);
+  global.localStorage.clear();
+
+  const form = saveform("#test-form");
+
+  form.save();
+
+  const storedJson = global.localStorage.getItem("saveform_test-form");
+  const storedData = JSON.parse(storedJson);
+
+  t.ok(storedData.hasOwnProperty("empty-name-field"), "should save fields with empty name using their ID");
+  t.equal(storedData["empty-name-field"], "empty-name-value", "should store correct value for empty name field");
+
+  t.ok(storedData.hasOwnProperty("no-name-field"), "should save fields without name but with ID using their ID");
+  t.equal(storedData["no-name-field"], "no-name-value", "should store correct value for no name field with ID");
+
+  t.notOk(storedData.hasOwnProperty("no-name-no-id-value"), "should not save fields without both name and ID");
+
+  // Test restore functionality as well
+  document.querySelector("#empty-name-field").value = "changed1";
+  document.querySelector("#no-name-field").value = "changed2";
+
+  form.restore();
+
+  t.equal(
+    document.querySelector("#empty-name-field").value,
+    "empty-name-value",
+    "should restore empty name field value",
+  );
+  t.equal(
+    document.querySelector("#no-name-field").value,
+    "no-name-value",
+    "should restore no name field with ID value",
+  );
+
+  t.end();
+});
+
 tap.test("saveform - fields selector with no matches", (t) => {
   setupDOM(basicFormHTML);
   global.localStorage.clear();
@@ -651,7 +697,7 @@ tap.test("saveform - default setter handles nullish values", (t) => {
   t.equal(
     document.querySelector('[name="comments"]').value,
     "",
-    "default setter should write empty string when stored value is nullish"
+    "default setter should write empty string when stored value is nullish",
   );
   t.end();
 });
