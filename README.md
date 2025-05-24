@@ -62,6 +62,12 @@ saveform("#my-form", {
 
 This saves all fields that have a `name="..."` or an `id="..."`.
 
+By default, `type="password"` and `type="file"` fields are excluded. To include password fields, use:
+
+```js
+saveform("#my-form", { exclude: '[type="file"]' });
+```
+
 ## API
 
 ### saveform(element, options)
