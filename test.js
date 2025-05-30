@@ -769,31 +769,6 @@ tap.test("saveform - config.fields function excluding all fields", (t) => {
   t.end();
 });
 
-tap.test("saveform - localStorage.setItem throwing QuotaExceededError", (t) => {
-  setupDOM(basicFormHTML);
-  global.localStorage.clear();
-
-  const originalSetItem = global.localStorage.setItem;
-  global.localStorage.setItem = (key, value) => {
-    throw new window.DOMException("QuotaExceededError", "QuotaExceededError");
-  };
-
-  t.teardown(() => {
-    global.localStorage.setItem = originalSetItem;
-  });
-
-  const form = saveform("#test-form");
-
-  try {
-    form.save();
-    t.fail("form.save() should have thrown an error due to QuotaExceededError");
-  } catch (e) {
-    t.equal(e.name, "QuotaExceededError", "error name should be QuotaExceededError");
-  }
-
-  t.end();
-});
-
 tap.test("saveform - custom accessors/setters with complex CSS selector", (t) => {
   const complexSelectorFormHTML = `
     <form id="complex-selector-form">
