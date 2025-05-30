@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saveform Test Fixture</title>
+</head>
+<body>
+    <form id="test-form">
+        <div>
+            <label for="text-input">Text Input:</label>
+            <input type="text" id="text-input" name="textInput">
+        </div>
+        <div>
+            <label for="email-input">Email Input:</label>
+            <input type="email" id="email-input" name="emailInput">
+        </div>
+        <div>
+            <label for="password-input">Password Input:</label>
+            <input type="password" id="password-input" name="passwordInput">
+        </div>
+        <div>
+            <label for="file-input">File Input:</label>
+            <input type="file" id="file-input" name="fileInput">
+        </div>
+        <fieldset>
+            <legend>Checkboxes:</legend>
+            <input type="checkbox" id="checkbox1" name="checkboxGroup" value="val1">
+            <label for="checkbox1">Checkbox 1</label>
+            <input type="checkbox" id="checkbox2" name="checkboxGroup" value="val2">
+            <label for="checkbox2">Checkbox 2</label>
+        </fieldset>
+        <fieldset>
+            <legend>Radio Buttons:</legend>
+            <input type="radio" id="radio-opt1" name="radioGroup" value="opt1">
+            <label for="radio-opt1">Radio Option 1</label>
+            <input type="radio" id="radio-opt2" name="radioGroup" value="opt2">
+            <label for="radio-opt2">Radio Option 2</label>
+            <input type="radio" id="radio-opt3" name="radioGroup" value="opt3" checked>
+            <label for="radio-opt3">Radio Option 3 (default checked)</label>
+        </fieldset>
+        <div>
+            <label for="single-select">Single Select:</label>
+            <select id="single-select" name="singleSelect">
+                <option value="">--Please choose an option--</option>
+                <option value="s_opt1">Option 1</option>
+                <option value="s_opt2">Option 2</option>
+                <option value="s_opt3">Option 3</option>
+            </select>
+        </div>
+        <div>
+            <label for="multiple-select">Multiple Select:</label>
+            <select id="multiple-select" name="multipleSelect" multiple>
+                <option value="m_opt1">Option 1 (Multiple)</option>
+                <option value="m_opt2">Option 2 (Multiple)</option>
+                <option value="m_opt3">Option 3 (Multiple)</option>
+            </select>
+        </div>
+        <div>
+            <label for="textarea-input">Textarea:</label>
+            <textarea id="textarea-input" name="textareaInput"></textarea>
+        </div>
+        <div>
+            <label for="excluded-by-class">Excluded by Class:</label>
+            <input type="text" id="excluded-by-class" name="excludedByClass" class="no-save-please">
+        </div>
+        <div>
+            <label for="excluded-by-attr">Excluded by Attribute:</label>
+            <input type="text" id="excluded-by-attr" name="excludedByAttr" data-nosave>
+        </div>
+        <div>
+            <!-- Field with no name or id, should be skipped by findFields unless formId generation kicks in for the whole form -->
+            <input type="text" value="no_name_or_id_field">
+        </div>
+         <div>
+            <label for="unnamed_field_with_id">Unnamed field with ID:</label>
+            <input type="text" id="unnamed_field_with_id">
+        </div>
+        <button type="submit">Submit</button>
+        <button type="reset">Reset</button>
+    </form>
+
+    <form id="form-to-test-id-generation">
+        <input type="text" name="fieldInNamelessForm" value="test">
+    </form>
+
+    <!-- Script for saveform.js will be loaded by the test environment -->
+</body>
+</html>
