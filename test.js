@@ -82,6 +82,35 @@ tap.test("saveform - basic initialization", (t) => {
   t.end();
 });
 
+tap.test("saveform - form with no input elements", (t) => {
+  const emptyFormHTML = `<form id="empty-form"></form>`;
+  setupDOM(emptyFormHTML);
+  global.localStorage.clear();
+
+  const formInstance = saveform("#empty-form", {
+    // Using a function for 'fields' to ensure related logic paths are tested,
+    // though it won't be called if there are no fields.
+    fields: (field) => field.name === "nonexistent",
+  });
+
+  const savedData = formInstance.save();
+  t.same(savedData, {}, "should return an empty object for a form with no fields");
+
+  const storedJson = global.localStorage.getItem("saveform_empty-form");
+  t.equal(storedJson, "{}", "localStorage should contain an empty JSON object string");
+
+  // Also test restore path
+  const restoredFields = formInstance.restore();
+  t.same(restoredFields, [], "restore should return empty array for form with no fields and empty storage");
+  
+  global.localStorage.setItem("saveform_empty-form", JSON.stringify({ somekey: "somevalue"}));
+  const restoredFieldsWithData = formInstance.restore();
+  t.same(restoredFieldsWithData, [], "restore should return empty array for form with no fields even if storage has data");
+
+
+  t.end();
+});
+
 tap.test("saveform - initialization with invalid selector", (t) => {
   setupDOM(basicFormHTML);
 
@@ -720,5 +749,139 @@ tap.test("saveform - generateFormId uniqueness for unnamed forms", (t) => {
 
   t.equal(keys.length, 2, "should create two separate storage keys");
   t.ok(keys[0] !== keys[1], "each unnamed form should get a unique id");
+  t.end();
+});
+
+tap.test("saveform - config.fields function excluding all fields", (t) => {
+  setupDOM(basicFormHTML);
+  global.localStorage.clear();
+
+  const formInstance = saveform("#test-form", {
+    fields: (field) => false, // Exclude all fields
+  });
+
+  const savedData = formInstance.save();
+  t.same(savedData, {}, "should return an empty object");
+
+  const storedJson = global.localStorage.getItem("saveform_test-form");
+  t.equal(storedJson, "{}", "localStorage should contain an empty JSON object string");
+
+  t.end();
+});
+
+tap.test("saveform - custom accessors/setters with complex CSS selector", (t) => {
+  const complexSelectorFormHTML = `
+    <form id="complex-selector-form">
+      <input type="text" name="setting1" data-saveable="true" value="val1">
+      <input type="text" name="setting2" value="val2">
+      <input type="text" name="setting3" data-saveable="true" value="val3">
+    </form>
+  `;
+  setupDOM(complexSelectorFormHTML);
+  global.localStorage.clear();
+
+  const formInstance = saveform("#complex-selector-form", {
+    accessors: {
+      'input[data-saveable="true"]': (field) => field.value.toUpperCase(),
+    },
+    setters: {
+      'input[data-saveable="true"]': (field, value) => {
+        field.value = value.toLowerCase();
+      },
+    },
+  });
+
+  const savedData = formInstance.save();
+
+  // Check saved data (transformed by accessors)
+  t.equal(savedData.setting1, "VAL1", "setting1 should be uppercase in saved data");
+  t.equal(savedData.setting2, "val2", "setting2 should be as-is in saved data (default accessor)");
+  t.equal(savedData.setting3, "VAL3", "setting3 should be uppercase in saved data");
+
+  // Verify localStorage content
+  const storedJson = global.localStorage.getItem("saveform_complex-selector-form");
+  const storedData = JSON.parse(storedJson);
+  t.equal(storedData.setting1, "VAL1", "setting1 in localStorage should be uppercase");
+  t.equal(storedData.setting2, "val2", "setting2 in localStorage should be as-is");
+  t.equal(storedData.setting3, "VAL3", "setting3 in localStorage should be uppercase");
+
+  // Modify values in DOM
+  document.querySelector('[name="setting1"]').value = "newVal1";
+  document.querySelector('[name="setting2"]').value = "newVal2";
+  document.querySelector('[name="setting3"]').value = "newVal3";
+
+  formInstance.restore();
+
+  // Check restored values in DOM (transformed by setters)
+  t.equal(document.querySelector('[name="setting1"]').value, "val1", "setting1 should be restored as lowercase");
+  t.equal(document.querySelector('[name="setting2"]').value, "val2", "setting2 should be restored as-is");
+  t.equal(document.querySelector('[name="setting3"]').value, "val3", "setting3 should be restored as lowercase");
+
+  t.end();
+});
+
+tap.test("saveform - checkbox explicitly restoring a false value", (t) => {
+  const checkboxFalseFormHTML = `
+    <form id="checkbox-false-form">
+      <input type="checkbox" name="mycheck" checked>
+    </form>
+  `;
+  setupDOM(checkboxFalseFormHTML);
+  global.localStorage.clear();
+
+  const formInstance = saveform("#checkbox-false-form");
+  const checkbox = document.querySelector('[name="mycheck"]');
+
+  // Manually uncheck, then save
+  checkbox.checked = false;
+  formInstance.save();
+
+  const storedJson = global.localStorage.getItem("saveform_checkbox-false-form");
+  const storedData = JSON.parse(storedJson);
+  t.equal(storedData.mycheck, false, "Saved data for mycheck should be false");
+
+  // Manually check again
+  checkbox.checked = true;
+  t.equal(checkbox.checked, true, "Checkbox should be checked before restore");
+
+  formInstance.restore();
+
+  t.equal(checkbox.checked, false, "Checkbox should be restored to false");
+
+  t.end();
+});
+
+tap.test("saveform - select[multiple] restoring an empty array", (t) => {
+  // Use a relevant part of basicFormHTML or define a specific one
+  const multiSelectFormHTML = `
+    <form id="multiselect-empty-form">
+      <select name="languages" multiple>
+        <option value="js" selected>JavaScript</option>
+        <option value="py" selected>Python</option>
+        <option value="rb">Ruby</option>
+      </select>
+    </form>
+  `;
+  setupDOM(multiSelectFormHTML);
+  global.localStorage.clear();
+
+  const formInstance = saveform("#multiselect-empty-form");
+  const selectElement = document.querySelector('[name="languages"]');
+
+  // Store data with 'languages' as an empty array
+  global.localStorage.setItem("saveform_multiselect-empty-form", JSON.stringify({ languages: [] }));
+
+  // Ensure some options are selected before restore
+  selectElement.options[0].selected = true; // js
+  selectElement.options[1].selected = true; // py
+  t.equal(selectElement.selectedOptions.length, 2, "Two options should be selected before restore");
+
+  formInstance.restore();
+
+  t.equal(selectElement.selectedOptions.length, 0, "Number of selected options should be 0 after restore");
+  t.equal(selectElement.options[0].selected, false, "JavaScript option should be deselected");
+  t.equal(selectElement.options[1].selected, false, "Python option should be deselected");
+  t.equal(selectElement.options[2].selected, false, "Ruby option should be deselected");
+
   t.end();
 });
