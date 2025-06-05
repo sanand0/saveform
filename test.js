@@ -885,3 +885,28 @@ tap.test("saveform - select[multiple] restoring an empty array", (t) => {
 
   t.end();
 });
+
+tap.test("saveform - dynamic fields retain values", (t) => {
+  setupDOM(`
+    <form id="dyn">
+      <input type="text" name="a" value="1">
+      <input type="text" name="b" value="2">
+    </form>
+  `);
+  localStorage.clear();
+  const f = saveform("#dyn");
+
+  f.save();
+  document.querySelector('[name="b"]').remove();
+  document.querySelector('[name="a"]').value = "x";
+
+  t.same(f.save(), { a: "x", b: "2" }, "save() merges with stored values");
+
+  const b = document.createElement("input");
+  b.name = "b";
+  document.querySelector("#dyn").appendChild(b);
+
+  f.restore();
+  t.equal(document.querySelector('[name="b"]').value, "2", "restore() reuses old value");
+  t.end();
+});

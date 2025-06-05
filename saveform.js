@@ -117,6 +117,9 @@ export default function saveform(element, options = {}) {
   function save() {
     const fields = findFields();
     let data = {};
+    try {
+      data = JSON.parse(config.storage.getItem(storageKey) || "{}");
+    } catch {}
 
     // Collect values from all fields
     fields.forEach((field) => {

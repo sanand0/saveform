@@ -107,6 +107,9 @@ const form = saveform("#my-form");
 form.save();
 ```
 
+`save()` merges the current form values with any data already in storage. This ensures values
+from fields that were removed from the DOM (for example, in dynamic forms) remain intact.
+
 #### restore()
 
 Manually restore saved values.
