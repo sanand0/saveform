@@ -55,12 +55,12 @@ saveform("#my-form");
 // With options
 saveform("#my-form", {
   storage: sessionStorage, // use sessionStorage instead of localStorage
-  prefix: "myapp_", // prefix for storage keys
+  prefix: "myapp_", // prefix for storage keys. Default: "saveform_"
   events: ["change"], // only save on change events
 });
 ```
 
-This saves all fields that have a `name="..."` or an `id="..."`.
+On any form `change`, this persists all fields that have a `name="..."` or an `id="..."` in `sessionStorage` (default: `localStorage`) as a JSON object with the key `${prefix}${formId}`, e.g. `myapp_my-form`. `formId` is the form's `id=` else `name=` else a random key.
 
 By default, `type="password"` and `type="file"` fields are excluded. To include password fields, use:
 

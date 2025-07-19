@@ -1,6 +1,6 @@
 {
   "name": "saveform",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Lightweight solution to persist form field values across page reloads",
   "type": "module",
   "main": "saveform.min.js",
