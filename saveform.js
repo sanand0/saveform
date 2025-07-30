@@ -145,7 +145,7 @@ export default function saveform(element, options = {}) {
     let data;
     try {
       data = JSON.parse(storedJson);
-    } catch (e) {
+    } catch {
       // Invalid JSON, clear it
       config.storage.removeItem(storageKey);
       return null;

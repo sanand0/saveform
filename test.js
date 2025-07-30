@@ -102,11 +102,14 @@ tap.test("saveform - form with no input elements", (t) => {
   // Also test restore path
   const restoredFields = formInstance.restore();
   t.same(restoredFields, [], "restore should return empty array for form with no fields and empty storage");
-  
-  global.localStorage.setItem("saveform_empty-form", JSON.stringify({ somekey: "somevalue"}));
-  const restoredFieldsWithData = formInstance.restore();
-  t.same(restoredFieldsWithData, [], "restore should return empty array for form with no fields even if storage has data");
 
+  global.localStorage.setItem("saveform_empty-form", JSON.stringify({ somekey: "somevalue" }));
+  const restoredFieldsWithData = formInstance.restore();
+  t.same(
+    restoredFieldsWithData,
+    [],
+    "restore should return empty array for form with no fields even if storage has data",
+  );
 
   t.end();
 });
@@ -359,7 +362,7 @@ tap.test("saveform - events option", (t) => {
   global.localStorage.clear();
 
   // Setup with only 'change' event
-  const form = saveform("#test-form", {
+  saveform("#test-form", {
     events: ["change"],
   });
 
@@ -757,7 +760,7 @@ tap.test("saveform - config.fields function excluding all fields", (t) => {
   global.localStorage.clear();
 
   const formInstance = saveform("#test-form", {
-    fields: (field) => false, // Exclude all fields
+    fields: () => false, // Exclude all fields
   });
 
   const savedData = formInstance.save();

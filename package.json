@@ -1,25 +1,37 @@
 {
   "name": "saveform",
-  "version": "1.2.3",
+  "version": "1.3.0",
   "description": "Lightweight solution to persist form field values across page reloads",
+  "homepage": "https://github.com/sanand0/saveform#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sanand0/saveform.git"
+  },
+  "license": "MIT",
+  "author": "Anand S <root.node@gmail.com>",
   "type": "module",
-  "main": "saveform.min.js",
   "module": "saveform.js",
-  "exports": {
-    "import": "./saveform.js",
-    "default": "./saveform.min.js"
+  "prettier": {
+    "printWidth": 120
   },
   "files": [
-    "saveform.js",
-    "saveform.min.js",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "dist/"
   ],
+  "exports": "./dist/saveform.min.js",
   "scripts": {
-    "lint": "prettier --write --print-width 120 *.js *.md *.json",
-    "build": "esbuild saveform.js --bundle --format=esm --outfile=saveform.min.js --minify",
+    "build": "npx -y esbuild saveform.js --bundle --format=esm --outfile=dist/saveform.min.js --minify",
+    "lint:oxlint": "npx -y oxlint --fix",
+    "lint:js-md": "npx -y prettier@3.5 --print-width 120 --write '**/*.js' '!**/*.min.js' '!dist/**' '**/*.md'",
+    "lint:html": "npx -y js-beautify@1 '**/*.html' --type html --replace --indent-size 2 --max-preserve-newlines 1 --end-with-newline",
+    "lint": "npm run lint:oxlint && npm run lint:js-md && npm run lint:html",
     "test": "tap --allow-incomplete-coverage test.js",
-    "prepublishOnly": "npm run build && npm run test && echo DONE"
+    "prepublishOnly": "npm run lint && npm run build && npm test"
+  },
+  "devDependencies": {
+    "jsdom": "^26.1.0",
+    "tap": "^21.1.0"
   },
   "keywords": [
     "form",
@@ -30,21 +42,5 @@
     "restore",
     "input",
     "browser"
-  ],
-  "author": "",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/sanand0/saveform.git"
-  },
-  "bugs": {
-    "url": "https://github.com/sanand0/saveform/issues"
-  },
-  "homepage": "https://github.com/sanand0/saveform#readme",
-  "devDependencies": {
-    "esbuild": "^0.25.4",
-    "jsdom": "^26.1.0",
-    "prettier": "^3.5.3",
-    "tap": "^21.1.0"
-  }
+  ]
 }
