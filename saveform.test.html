@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+</head>
+
+<body>
+  <div id="root">
+    <form id="test-form">
+      <input type="text" name="username" value="initial">
+      <input type="email" name="email" value="test@example.com">
+      <input type="password" name="password" value="secret">
+      <textarea name="comments">Some text</textarea>
+      <input type="checkbox" name="subscribe" checked>
+      <select name="country">
+        <option value="us">US</option>
+        <option value="ca" selected>CA</option>
+        <option value="uk">UK</option>
+      </select>
+      <select name="languages" multiple>
+        <option value="js" selected>JS</option>
+        <option value="py">PY</option>
+        <option value="rb" selected>RB</option>
+      </select>
+      <input type="radio" name="gender" value="male" checked>
+      <input type="radio" name="gender" value="female">
+    </form>
+  </div>
+  <script type="module">
+    import saveform from "./saveform.js";
+    window.saveform = saveform;
+
+  </script>
+</body>
+
+</html>
