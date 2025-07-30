@@ -26,12 +26,11 @@
     "lint:js-md": "npx -y prettier@3.5 --print-width 120 --write '**/*.js' '!**/*.min.js' '!dist/**' '**/*.md'",
     "lint:html": "npx -y js-beautify@1 '**/*.html' --type html --replace --indent-size 2 --max-preserve-newlines 1 --end-with-newline",
     "lint": "npm run lint:oxlint && npm run lint:js-md && npm run lint:html",
-    "test": "tap --allow-incomplete-coverage test.js",
+    "test": "npx -y vitest run",
     "prepublishOnly": "npm run lint && npm run build && npm test"
   },
   "devDependencies": {
-    "jsdom": "^26.1.0",
-    "tap": "^21.1.0"
+    "happy-dom": "^18.0.1"
   },
   "keywords": [
     "form",
