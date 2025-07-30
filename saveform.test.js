@@ -6,29 +6,6 @@ const browser = new Browser({
   settings: { fetch: { virtualServers: [{ url: "https://test/", directory: "." }] } },
 });
 
-function basicForm() {
-  return `
-    <form id="test-form">
-      <input type="text" name="username" value="initial">
-      <input type="email" name="email" value="test@example.com">
-      <input type="password" name="password" value="secret">
-      <textarea name="comments">Some text</textarea>
-      <input type="checkbox" name="subscribe" checked>
-      <select name="country">
-        <option value="us">US</option>
-        <option value="ca" selected>CA</option>
-        <option value="uk">UK</option>
-      </select>
-      <select name="languages" multiple>
-        <option value="js" selected>JS</option>
-        <option value="py">PY</option>
-        <option value="rb" selected>RB</option>
-      </select>
-      <input type="radio" name="gender" value="male" checked>
-      <input type="radio" name="gender" value="female">
-    </form>`;
-}
-
 describe("saveform", () => {
   let page, document, window;
 
@@ -42,14 +19,13 @@ describe("saveform", () => {
 
   beforeEach(async () => {
     page = browser.newPage();
-    await page.goto("https://test/saveform-test.html");
+    await page.goto("https://test/saveform.test.html");
     await page.waitUntilComplete();
     document = page.mainFrame.document;
     window = page.mainFrame.window;
     window.setTimeout = setTimeout;
     window.localStorage.clear();
     window.sessionStorage.clear();
-    document.getElementById("root").innerHTML = basicForm();
   });
 
   function initForm(selector = "#test-form", opts) {
