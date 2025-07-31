@@ -190,7 +190,7 @@ git commit . -m"$COMMIT_MSG"; git tag $VERSION; git push --follow-tags
 
 ## Release notes
 
-- [1.3.0](https://npmjs.com/package/saveform/v/1.3.0): 30 Jul 2025. Standardized package.json & README.md, move saveform.min.js into dist/
+- [1.3.1](https://npmjs.com/package/saveform/v/1.3.1): 31 Jul 2025. Standardized package.json & README.md, move saveform.min.js into dist/
 - [1.2.2](https://npmjs.com/package/saveform/v/1.2.2): 5 Jun 2025. Document how to save password / hidden fields, expand test coverage
 - [1.2.0](https://npmjs.com/package/saveform/v/1.2.0): 22 May 2025. Fall back to `id` attribute if `name` is missing
 - [1.1.1](https://npmjs.com/package/saveform/v/1.1.1): 21 May 2025. Renamed `"all"` option to `"*"`. Added tests and docs
