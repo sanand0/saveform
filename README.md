@@ -19,27 +19,39 @@ Automatically save HTML form field values to localStorage or sessionStorage and 
 
 ## Installation
 
-Install via `npm`:
+Add this to your script:
+
+```js
+import saveform from "saveform";
+```
+
+To use via CDN, add this to your HTML file:
+
+```html
+<script type="importmap">
+  {
+    "imports": {
+      "saveform": "https://cdn.jsdelivr.net/npm/saveform@1"
+    }
+  }
+</script>
+```
+
+To use locally, install via `npm`:
 
 ```bash
 npm install saveform
 ```
 
-Use locally as an ES module:
+... and add this to your HTML file:
 
 ```html
-<script type="module">
-  import saveform from "./node_modules/saveform/dist/saveform.min.js";
-  saveform("#my-form");
-</script>
-```
-
-Use via CDN as an ES Module:
-
-```html
-<script type="module">
-  import saveform from "https://cdn.jsdelivr.net/npm/saveform@1.3";
-  saveform("#my-form");
+<script type="importmap">
+  {
+    "imports": {
+      "saveform": "./node_modules/saveform/dist/saveform.min.js"
+    }
+  }
 </script>
 ```
 
