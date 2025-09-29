@@ -101,6 +101,7 @@ Type: `Object`
 | `events`    | `string[]`             | `['input', 'change']`                | Events that trigger saving           |
 | `fields`    | `string` \| `Function` | `'*'`                                | Fields to include (`*` includes all) |
 | `exclude`   | `string` \| `Function` | `'[type="password"], [type="file"]'` | Fields to exclude                    |
+| `dropEmpty` | `boolean`              | `false`                              | Delete (reset) key if value is ""    |
 | `accessors` | `Object`               | `{}`                                 | Custom value getters                 |
 | `setters`   | `Object`               | `{}`                                 | Custom value setters                 |
 
@@ -164,6 +165,15 @@ saveform("#my-form", {
   fields: (field) => field.dataset.save === "true",
   exclude: (field) => field.name.startsWith("private_"),
 });
+```
+
+### Reset saved values
+
+`dropEmpty: true` lets users revert to the page default by clearing a field.
+
+```js
+// Allow user to reset saved valued
+saveform("#my-form", { dropEmpty: true });
 ```
 
 ### Custom Value Handlers

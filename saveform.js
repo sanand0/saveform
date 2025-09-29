@@ -15,6 +15,7 @@ export default function saveform(element, options = {}) {
     exclude: '[type="password"], [type="file"]',
     accessors: {},
     setters: {},
+    dropEmpty: false,
   };
 
   // Merge options with defaults
@@ -129,7 +130,11 @@ export default function saveform(element, options = {}) {
       // Skip undefined values (unselected radio buttons)
       if (value === undefined) return;
 
-      data[field.name || field.id] = value;
+      const key = field.name || field.id;
+
+      // Delete keys with empty string if dropEmpty is set
+      if (config.dropEmpty && value === "") delete data[key];
+      else data[key] = value;
     });
 
     // Save to storage

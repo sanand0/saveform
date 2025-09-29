@@ -65,12 +65,32 @@ describe("saveform", () => {
     expect(window.sessionStorage.getItem("x_test-form")).toBeTruthy();
   });
 
+  it("drops empty values when configured", () => {
+    const f = initForm("#test-form", { dropEmpty: true });
+    f.save();
+
+    field("username").value = "";
+    field("age").value = "";
+    field("subscribe").checked = false;
+
+    const saved = f.save();
+
+    expect(saved.username).toBeUndefined();
+    expect(saved.age).toBeUndefined();
+    expect(saved.subscribe).toEqual(false);
+
+    const stored = JSON.parse(window.localStorage.getItem("saveform_test-form"));
+    expect(stored.username).toBeUndefined();
+    expect(stored.age).toBeUndefined();
+    expect(stored.subscribe).toEqual(false);
+  });
+
   it("handles fields inclusion/exclusion", () => {
     const tests = [
       { opts: { fields: 'input[type="text"]' }, expect: ["username"] },
       {
         opts: { exclude: "textarea" },
-        expect: ["username", "email", "password", "subscribe", "country", "languages", "gender"],
+        expect: ["username", "age", "email", "password", "subscribe", "country", "languages", "gender"],
       },
     ];
     tests.forEach(({ opts, expect: names }) => {
